@@ -46,8 +46,7 @@ scalacOptions ++= Seq(
   "-Ycache-macro-class-loader:last-modified" // and macro definitions. This can lead to performance improvements.
 )
 
-resolvers +=
-  "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
+resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
 
 libraryDependencies ++= Seq(
   compilerPlugin(Libraries.kindProjector),
@@ -55,6 +54,10 @@ libraryDependencies ++= Seq(
   Libraries.catsEffect,
   Libraries.fs2,
   Libraries.http4sDsl,
+  Libraries.akkaHttp,
+  Libraries.akkaStream,
+  Libraries.akkaActor,
+  Libraries.akkaHttpSprayJson,
   Libraries.http4sServer,
   Libraries.http4sCirce,
   Libraries.circeCore,
@@ -62,8 +65,14 @@ libraryDependencies ++= Seq(
   Libraries.circeGenericExt,
   Libraries.circeParser,
   Libraries.pureConfig,
+  Libraries.scalaLogging,
   Libraries.logback,
+  "com.typesafe.slick" %% "slick" % "3.3.3",
+  "org.postgresql" % "postgresql" % "42.3.4",
+  "com.typesafe.slick" %% "slick-hikaricp" % "3.3.3",
+  "com.github.tminglei" %% "slick-pg" % "0.20.3",
+  "com.github.tminglei" %% "slick-pg_play-json" % "0.20.3",
   Libraries.scalaTest        % Test,
   Libraries.scalaCheck       % Test,
-  Libraries.catsScalaCheck   % Test
+  Libraries.catsScalaCheck   % Test,
 )

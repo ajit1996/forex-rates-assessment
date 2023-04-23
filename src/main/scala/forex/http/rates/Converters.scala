@@ -1,7 +1,8 @@
 package forex.http.rates
+import forex.domain.{Rate, Timestamp}
+import forex.programs.rates.errors.Error
 
-import forex.domain._
-
+import java.time.{OffsetDateTime, ZoneId}
 object Converters {
   import Protocol._
 
@@ -15,4 +16,11 @@ object Converters {
       )
   }
 
+  private[rates] implicit class GetApiErrorResponseOps(val error: Error) extends AnyVal {
+    def asGetApiErrorResponse: GetApiErrorResponse =
+      GetApiErrorResponse(
+        message = error.getMessage,
+        timestamp = Timestamp(OffsetDateTime.now(ZoneId.of("Z")))
+      )
+  }
 }
