@@ -92,6 +92,7 @@ class OneFrameInterpreter[F[_]: Applicative] extends Algebra[F] {
   }
 
   private def fetchCurrencyConversionRatesFromOneFrameApi(currencyPair: String): Either[OneFrameResponse, Error] = {
+    scalaLogger.logger.info("Inside fetch currency rates for pair - {}", currencyPair)
     implicit val system: ActorSystem             = ActorSystem()
     implicit val materializer: ActorMaterializer = ActorMaterializer()
 
