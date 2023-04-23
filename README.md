@@ -24,12 +24,12 @@ Please note the following drawback of the [One-Frame service](https://hub.docker
 * Checkout the git repo (i.e ) and go to project directory
 * Run following command in terminal to run one-frame-application and postgres in separate docker containers: **docker-compose up** 
 * I've added Dockerfile for forex-rates app but for some reason even after adding network configuration for postgres in docker-compose getting issues running locally 
-* As a workaround to run forex-rates, Service can run locally on port 8080 and for ease have kept sbt package within repo. 
+* As a workaround to run forex-rates service, Either we can run service from editor of any choice or from terminal and for ease have kept sbt package within repo. 
 
-### Steps to run Application :
-    1 - Clone git repo and go to project directory
-    2 - Run command **docker-compose up**
-    3 - Run command **sbt/bin/sbt run forex.jar**
+### Steps To Run Application :
+    1 - Clone git repo (i.e git clone https://github.com/ajit1996/forex-rates-assessment.git )and go to project directory
+    2 - Run command docker-compose up
+    3 - Run command in separate terminal sbt/bin/sbt run forex.jar
 
 ### The Forex Rates API Sample Examples :
 
