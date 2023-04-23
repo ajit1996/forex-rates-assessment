@@ -14,7 +14,7 @@ import forex.domain.Rate.Pair
 import forex.domain.{Currency, Price, Rate, Timestamp}
 import forex.models._
 import forex.services.rates.Algebra
-import forex.services.rates.errors.Error.{OneFrameLookupFailed, ParsingFailed, SameCurrencyConversionFailed, UnsupportedCurrencyError}
+import forex.services.rates.errors.Error.{OneFrameLookupFailed, ParsingFailed, SameCurrencyExchangeNotAllowed, UnsupportedCurrencyError}
 import forex.services.rates.errors._
 import forex.utils.{DbUtils, ScalaLogger}
 import io.circe.{Decoder, HCursor, Json, ParsingFailure, jawn, parser}
@@ -48,22 +48,22 @@ class OneFrameInterpreter[F[_]: Applicative] extends Algebra[F] {
       )
   }
   override def get(pair: Rate.Pair): F[Error Either Rate] =
-    getValidCurrencyConversionRates(pair.from, pair.to) match {
+    getValidCurrencyExchangeRates(pair.from, pair.to) match {
       case Left(rate)   => rate.asRight[Error].pure[F]
       case Right(error) => error.asLeft[Rate].pure[F]
     }
 
-  private def getValidCurrencyConversionRates(fromCurrency: Currency, toCurrency: Currency): Either[Rate, Error] = {
+  private def getValidCurrencyExchangeRates(fromCurrency: Currency, toCurrency: Currency): Either[Rate, Error] = {
     if (isInvalidCurrency(fromCurrency))
       Right(UnsupportedCurrencyError(s"Un-supported/Invalid from_currency"))
     else if (isInvalidCurrency(toCurrency))
       Right(UnsupportedCurrencyError(s"Un-supported/Invalid to_currency"))
     else if (fromCurrency.equals(toCurrency))
-      Right(SameCurrencyConversionFailed(s"Same from_currency - $fromCurrency and to_currency - $toCurrency can't be converted"))
+      Right(SameCurrencyExchangeNotAllowed(s"Same from_currency - $fromCurrency and to_currency - $toCurrency can't be converted"))
     else
-      getCurrencyConversionRates(fromCurrency, toCurrency)
+      getCurrencyExchangeRates(fromCurrency, toCurrency)
   }
-  private def getCurrencyConversionRates(fromCurrency: Currency, toCurrency: Currency): Either[Rate, Error] = {
+  private def getCurrencyExchangeRates(fromCurrency: Currency, toCurrency: Currency): Either[Rate, Error] = {
     val currencyPair: String = fromCurrency.toString + toCurrency.toString
     if (isOneFrameResponsePresentInDb(fromCurrency, toCurrency)) {
       val oneFrameResponse = fetchOneFrameResponseFromDb(fromCurrency, toCurrency)
